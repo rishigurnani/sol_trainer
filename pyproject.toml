@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "sol_trainer"
+version = "0.1.0"
+description = ""
+authors = ["Rishi Gurnani <rgurnani96@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+numpy = "^1.17"
+GPUtil = "^1.4.0"
+torchcontrib = "^0.0.2"
+wheel = "^0.37.1"
+poethepoet = "^0.13.1"
+pandas = "^2.1.4"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+scikit-optimize = "^0.9.0"
+rdkit-pypi = "^2021.9.3"
+ipykernel = "^6.6.0"
+black = "^22.3.0"
+
+[tool.poe.tasks]
+torch-linux_win-cuda102 = "pip install torch==1.9.1+cu102 torchvision==0.10.1+cu102 torchaudio==0.9.1 -f https://download.pytorch.org/whl/torch_stable.html"
+pyg-linux-cuda102 = "pip install https://data.pyg.org/whl/torch-1.9.0%2Bcu102/torch_scatter-2.0.9-cp39-cp39-linux_x86_64.whl https://data.pyg.org/whl/torch-1.9.0%2Bcu102/torch_sparse-0.6.12-cp39-cp39-linux_x86_64.whl torch_geometric"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

@@ -7,7 +7,7 @@ import warnings
 
 from sol_trainer import constants
 from sol_trainer.hyperparameters.hyperparameters import compute_batch_max
-from sol_trainer.load import load_hps, load_selectors
+from sol_trainer import load, load2
 from sol_trainer.utils import _assemble_data
 from .prepare import prepare_infer
 
@@ -115,11 +115,17 @@ def eval_ensemble(
         else:
             eval_config = evalConfig(use_max_batch=True)
     model.to(device)
-    selectors = load_selectors(root_dir)
+    try:
+        selectors = load.load_selectors(root_dir)
+    except:
+        selectors = load2.load_selectors(root_dir)
     selector_dim = len(selectors)
     # Prepare dataframe.
     if "data" not in dataframe.columns:
-        hps = load_hps(root_dir)
+        try:
+            hps = load.load_hps(root_dir)
+        except:
+            hps = load2.load_hps(root_dir)
         dataframe = prepare_infer(
             dataframe,
             smiles_featurizer,
@@ -175,9 +181,8 @@ def _evaluate_ensemble(model, val_loader, device, selector_dim, return_dict, **k
         y_hat_std (np.ndarray): Std. dev. of data predictions
         y_selectors (np.ndarray): Selector for each data point
     """
-    return _evaluate(
-        model, val_loader, device, True, selector_dim, return_dict, **kwargs
-    )
+
+    return _evaluate(model, val_loader, device, selector_dim, return_dict, **kwargs)
 
 
 def eval_submodel(model, val_loader, device, selector_dim=None):
@@ -189,14 +194,10 @@ def eval_submodel(model, val_loader, device, selector_dim=None):
         y_hat (np.ndarray): Data predictions
         y_selectors (np.ndarray): Selector for each data point
     """
-    return _evaluate(
-        model, val_loader, device, monte_carlo=False, selector_dim=selector_dim
-    )
+    return _evaluate(model, val_loader, device, selector_dim=selector_dim)
 
 
-def _evaluate(
-    model, val_loader, device, monte_carlo, selector_dim, return_dict=False, **kwargs
-):
+def _evaluate(model, val_loader, device, selector_dim, return_dict=False, **kwargs):
     """
     Evaluate model on the data contained in val_loader. This function is not
     to be called directly. It is a helper function for eval_submodel and
@@ -221,7 +222,7 @@ def _evaluate(
         # sometimes the batch may have selectors associated. Let's check
         if selector_dim:
             selectors += data.selector.cpu().numpy().tolist()
-        if not monte_carlo:
+        if not model.monte_carlo:
             data = model(_assemble_data(model, data))
             y_val_hat_mean += data.yhat.detach().cpu().numpy().tolist()
         # if we are doing a monte_carlo evaluation then we will have two
@@ -248,7 +249,7 @@ def _evaluate(
         "selectors": selectors,
         "y_val_hat_std": y_val_hat_std,
     }
-    if monte_carlo:
+    if model.monte_carlo:
         y_val_hat_std = np.array(y_val_hat_std)
         if return_dict:
             d.update(
@@ -268,7 +269,7 @@ def _evaluate(
         if return_dict:
             return d
         else:
-            return y_val, y_val_hat_mean, selectors
+            return y_val, y_val_hat_mean, y_val_hat_std, selectors
 
 
 @dataclass

@@ -1,4 +1,4 @@
-from torch import nn, zeros, manual_seed, tensor, LongTensor
+from torch import nn, zeros, manual_seed, tensor, LongTensor, atleast_1d
 
 from . import constants
 from .utils import _assemble_data, get_unit_sequence
@@ -134,5 +134,5 @@ class LinearEnsemble(nn.Module):
             # For classification, data.y_hat contains raw class scores
             # at this point. We need to convert these scores into a
             # class label. We do so by taking the argmax.
-            data.yhat = data.yhat.max(-1)[1]
+            data.yhat = atleast_1d(data.yhat.max(-1)[1])
         return data

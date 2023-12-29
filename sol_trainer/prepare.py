@@ -16,7 +16,7 @@ from os import path
 from .scale import *
 from sol_trainer import save
 from sol_trainer import constants as ks
-from sol_trainer import load
+from sol_trainer import load, load2
 
 
 def obj_to_tensor(obj, tensortype=FloatTensor):
@@ -350,7 +350,7 @@ def prepare_data(
         else:
             class_labels = load.load_classlabels(root_dir)
 
-    if not regression:
+    if not regression and from_scratch:
         dataframe["value"] = dataframe["value"].replace(class_labels)
 
     prop_cols = prepare_init(dataframe, from_scratch)
@@ -497,7 +497,10 @@ def prepare_data(
                 mm_scaler.fit(trans_prop_vals)  # fit scaler on training data
                 scaler_dict[prop].append(mm_scaler)
     else:
-        scaler_dict = load.load_scalers(root_dir)
+        try:
+            scaler_dict = load.load_scalers(root_dir)
+        except:
+            scaler_dict = load2.load_scalers(root_dir)
 
     def _get_data(x, valuetype=FloatTensor):
         """

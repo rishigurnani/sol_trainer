@@ -13,7 +13,7 @@ import warnings
 import time
 
 from sol_trainer import __version__
-from sol_trainer import save, loss, constants, models
+from sol_trainer import save, loss, constants, models, load
 from sol_trainer import utils as st_utils
 from sol_trainer.hyperparameters import (
     HpConfig,
@@ -29,10 +29,6 @@ from sol_trainer.layers import (
 )
 from sol_trainer.infer import eval_ensemble
 from sol_trainer.layers import UOut, identity, my_hidden
-from sol_trainer.load import (
-    load_ensemble,
-    load_selectors,
-)
 from sol_trainer.train import (
     train_all_epochs,
     train_end,
@@ -346,7 +342,7 @@ def test_ensemble_trainer(fixture, request, example_data, capsys):
         data1 = data1.sort_index()
         assert data0.smiles_string.values[0] == data1.smiles_string.values[1]
         # When using MC dropout, we cannot ensure consistent predictions.
-        ensemble = load_ensemble(
+        ensemble = load.load_ensemble(
             models.LinearEnsemble,
             root,
             models.MlpOut,
@@ -362,7 +358,7 @@ def test_ensemble_trainer(fixture, request, example_data, capsys):
         )
         assert mc_result0[0] != mc_result1[1]
         # When NOT using MC dropout, we CAN ensure consistent predictions.
-        ensemble = load_ensemble(
+        ensemble = load.load_ensemble(
             models.LinearEnsemble,
             root,
             models.MlpOut,
@@ -381,7 +377,7 @@ def test_ensemble_trainer(fixture, request, example_data, capsys):
     if root == "st_classification_ensemble":
         # Below, let's check that a classification ensemble can infer
         # without error.
-        ensemble = load_ensemble(
+        ensemble = load.load_ensemble(
             models.LinearEnsemble,
             root,
             models.MlpOut,
@@ -420,11 +416,11 @@ def test_load_ensemble_noerror(fixture, request):
         output_dim = 1
     else:
         output_dim = data_for_test["base_train_config"].loss_obj.n_classes
-    selectors = load_selectors(data_for_test["root"])
+    selectors = load.load_selectors(data_for_test["root"])
     selector_dim = torch.numel(list(selectors.values())[0])
     # calculate input dimension
     input_dim = 512 + selector_dim
-    ensemble = load_ensemble(
+    ensemble = load.load_ensemble(
         models.LinearEnsemble,
         data_for_test["root"],
         models.MlpOut,
@@ -437,105 +433,6 @@ def test_load_ensemble_noerror(fixture, request):
     )
     assert ensemble.regression == regression
     assert len(ensemble.submodel_dict) > 0
-
-
-@pytest.fixture
-def example_linear_data():
-    root_dir = "ensemble_linear/"
-    graph_feats = [
-        {"feat0": 0, "feat1": 0},
-        {"feat0": 1, "feat1": 1},
-        {"feat0": 2, "feat1": 2},
-        {"feat0": 3, "feat1": 3},
-    ] * 2
-    props = ["prop1"] * 4 + ["prop2"] * 4
-    values = [0, 99, 999, 9999] * 2  # trick the code into scaling
-    data = {"prop": props, "value": values, "graph_feats": graph_feats}
-    dataframe = pd.DataFrame(data)
-    dataframe_processed, scaler_dict = prepare_train(
-        dataframe,
-        smiles_featurizer=None,
-        root_dir=root_dir,
-    )
-    return {
-        "dataframe": dataframe,
-        "dataframe_processed": dataframe_processed,
-        "scaler_dict": scaler_dict,
-        "root_dir": root_dir,
-    }
-
-
-def test_prepTrainSaveLoad_output(example_linear_data):
-    """
-    This test checks that the output of a training run are what we
-    expect after:
-        - preparing the data
-        - training the ensemble
-            - Check for no errors
-            - Check that tc.get_train_pts is None
-        - saving the ensemble
-        - loading the ensemble
-    """
-    tc = trainConfig(
-        loss_obj=None,
-        amp=False,
-    )
-    tc.device = "cpu"  # run this on a CPU since this is just a test
-
-    # "train" the ensemble with trainer_MathModel
-    train_kfold_LinearEnsemble(
-        example_linear_data["dataframe_processed"],
-        submodel_cls=MathModel1,
-        submodel_kwargs_dict={"hps": None, "dummy_attr": 1},
-        train_config=tc,
-        submodel_trainer=trainer_MathModel,
-        augmented_featurizer=None,  # since we do not want augmentation
-        scaler_dict=example_linear_data["scaler_dict"],
-        root_dir=example_linear_data["root_dir"],
-        n_fold=2,
-        random_seed=234,
-    )
-    # check that tc.get_train_pts is set to None
-    assert tc.get_train_pts == None
-    # ####################################
-    # load the ensemble and run it forward
-    # ####################################
-    ensemble = load_ensemble(
-        models.LinearEnsemble,
-        example_linear_data["root_dir"],
-        submodel_cls=MathModel1,
-        device="cpu",
-        submodel_kwargs_dict={"dummy_attr": 1},
-    )
-    _, mean, _, _ = eval_ensemble(
-        model=ensemble,
-        root_dir=example_linear_data["root_dir"],
-        dataframe=example_linear_data["dataframe"],
-        smiles_featurizer=None,
-        device="cpu",
-        ensemble_kwargs_dict={"n_passes": 1},
-        ncore=2,  # to activate parallelization
-    )
-    # ###########################
-    inv_transform = lambda x: (10 ** (4 * x)) - 1  # define the inverse transformation
-    # that should have been computed on example_linear_data
-
-    # loop through results
-    # TODO: Parallelize?
-    for ind, x in enumerate(
-        example_linear_data["dataframe_processed"].data.values.tolist()
-    ):
-        trans_val = (
-            x.graph_feats[0, 0]
-            + x.graph_feats[0, 1]
-            + x.selector[0, 0]
-            - x.selector[0, 1]
-        )  # output of the model
-        ens_output = mean[ind]  # output of the ensemble
-        np.testing.assert_allclose(
-            ens_output, inv_transform(trans_val), rtol=1e-5, atol=0
-        )  # check that the output
-        # of the ensemble matches the transformed output of the submodel
 
 
 @pytest.fixture

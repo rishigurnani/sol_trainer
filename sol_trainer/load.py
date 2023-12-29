@@ -6,7 +6,11 @@ from torch import load as torch_load
 from re import search, compile
 
 from . import constants as ks
-from . import models
+from . import models, load2
+
+
+def get_selectors_path(root):
+    return path_join(root, ks.METADATA_DIR, ks.SELECTORS_FILENAME)
 
 
 def file_filter(root_dir, pattern):
@@ -29,29 +33,50 @@ def safe_pickle_load(path):
 
 
 def load_selectors(root_dir):
-    selectors_path = path_join(root_dir, ks.METADATA_DIR, ks.SELECTORS_FILENAME)
+    selectors_path = get_selectors_path(root_dir)
     return safe_pickle_load(selectors_path)
 
 
+def get_features_path(root_dir):
+    return path_join(root_dir, ks.METADATA_DIR, ks.FEATURE_FILENAME_PKL)
+
+
 def load_features(root_dir):
-    path = path_join(root_dir, ks.METADATA_DIR, ks.FEATURE_FILENAME_PKL)
+    path = get_features_path(root_dir)
     return safe_pickle_load(path)
 
 
+def get_scalers_path(root_dir):
+    return path_join(root_dir, ks.METADATA_DIR, ks.SCALERS_FILENAME)
+
+
 def load_scalers(root_dir):
-    scalers_path = path_join(root_dir, ks.METADATA_DIR, ks.SCALERS_FILENAME)
+    scalers_path = get_scalers_path(root_dir)
     return safe_pickle_load(scalers_path)
 
 
-def load_hps(root_dir):
-    hps_path = path_join(root_dir, ks.METADATA_DIR, ks.HPS_FILENAME)
-    loaded_hps = safe_pickle_load(hps_path)
-    hps = HpConfig()
-    if loaded_hps:
-        # If hyperparameters were saved, let's load them into hps.
-        hps.set_values_from_string(str(loaded_hps))
+def get_hps_path(root_dir):
+    return path_join(root_dir, ks.METADATA_DIR, ks.HPS_FILENAME)
 
-    return hps
+
+def safe_pickle_load(path):
+    with open(path, "rb") as f:
+        return pickle.load(f)
+
+
+def load_hps(root_dir, base_hps=HpConfig()):
+    """
+    Replace the values of `base_hps` with the saved values in `root_dir`.
+    """
+    hps_path = get_hps_path(root_dir)
+    loaded_hps = safe_pickle_load(hps_path)
+    if loaded_hps:
+        assert type(base_hps) == type(
+            loaded_hps
+        ), f"{type(base_hps)}.{type(loaded_hps)}"
+        # If hyperparameters were saved, let's load them into base_hps.
+        base_hps.set_values_from_string(str(loaded_hps))
+    return base_hps
 
 
 def load_submodel_dict(root_dir, submodel_cls, submodel_kwargs_dict):
@@ -91,12 +116,43 @@ def load_ensemble(
         ensemble_init_kwargs (dict): Arguments to pass into __init__
             method of the ensemble.
     """
-    # Load the scalers.
-    scalers_path = path_join(root_dir, ks.METADATA_DIR, ks.SCALERS_FILENAME)
-    with open(scalers_path, "rb") as f:
-        scalers = pickle.load(f)
+    # #########
+    # Load hps
+    # #########
+    hps_path_pkl = path_join(root_dir, ks.METADATA_DIR, ks.HPS_FILENAME)
+    # Use the txt file if it exists.
+    if path.exists(load2.pkl_to_txt(hps_path_pkl)):
+        hps = load2.load_hps(root_dir)
+    else:
+        with open(hps_path_pkl, "rb") as f:
+            hps = pickle.load(f)
+    # #############
+    # Load scalers
+    # #############
+    scalers_path_pkl = path_join(root_dir, ks.METADATA_DIR, ks.SCALERS_FILENAME)
+    # Use the json file if it exists.
+    if path.exists(load2.pkl_to_json(scalers_path_pkl)):
+        scalers = load2.load_scalers(root_dir)
+    else:
+        with open(scalers_path_pkl, "rb") as f:
+            scalers = pickle.load(f)
+    # ######################
     # Load the submodels.
-    submodel_dict = load_submodel_dict(root_dir, submodel_cls, submodel_kwargs_dict)
+    # ######################
+    # get the path to all submodels
+    model_dir = path_join(root_dir, ks.MODELS_DIR)
+    submodel_paths = sorted(file_filter(model_dir, ks.submodel_re))
+    # determine the ensemble class
+    all_model_dir_paths = sorted(
+        file_filter(model_dir, ".*")
+    )  # ".*" should match anything
+    if submodel_paths == all_model_dir_paths:
+        ensemble_cls = models.LinearEnsemble
+    # load the submodels
+    submodel_dict = {
+        ind: load_model(path, submodel_cls, hps=hps, **submodel_kwargs_dict)
+        for ind, path in enumerate(submodel_paths)
+    }
     # Send each submodel to the appropriate device.
     for model in submodel_dict.values():
         model.to(device)

@@ -9,7 +9,7 @@ python = "^3.9"
 numpy = "^1.26"
 GPUtil = "^1.4.0"
 torchcontrib = "^0.0.2"
-wheel = "^0.37.1"
+wheel = "^0.42.0"
 poethepoet = "^0.13.1"
 pandas = "^2.1.4"
 

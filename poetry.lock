@@ -1133,34 +1133,39 @@ cffi = {version = "*", markers = "implementation_name == \"pypy\""}
 
 [[package]]
 name = "rdkit-pypi"
-version = "2021.9.5.1"
+version = "2022.9.5"
 description = "A collection of chemoinformatics and machine-learning software written in C++ and Python"
 optional = false
 python-versions = "*"
 files = [
-    {file = "rdkit_pypi-2021.9.5.1-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:545ec175a044f0ac404e5ccc98e32b70564f3e0b4d80435a8b7047efe7e072a9"},
-    {file = "rdkit_pypi-2021.9.5.1-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:254002ae4045153e5ee1ed48d7ab1bbe0839e561487727610c5653f5ce70a649"},
-    {file = "rdkit_pypi-2021.9.5.1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:10eef88fa26d192162c610537c993c201f92ab683f42237a762cf64929b7dfab"},
-    {file = "rdkit_pypi-2021.9.5.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c436fc6bb18d99cb2222c4da7e09dc4a635550b823c646131e77a6bd35dfcaf0"},
-    {file = "rdkit_pypi-2021.9.5.1-cp310-cp310-win_amd64.whl", hash = "sha256:627f8aa59690f4a17bf17559e9f112883a092a06d926eec4b005e9efa314e8fd"},
-    {file = "rdkit_pypi-2021.9.5.1-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:e53d2010d43f7f8e11d17b9969ba977bdf683784445dc92c574d6aba1dccb15f"},
-    {file = "rdkit_pypi-2021.9.5.1-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:315b3ef777b61ce2b768cba0c4c946319a28ed5dcd2ac9d1c6e725af32a7c1ea"},
-    {file = "rdkit_pypi-2021.9.5.1-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:b5a741b0ba757b3538de54918486eec76c0846c70380d7c0318e335681adecff"},
-    {file = "rdkit_pypi-2021.9.5.1-cp37-cp37m-win_amd64.whl", hash = "sha256:d0ad8751ec45768c5f21e4fda15c2d268846703a8e7fd50667a5bbe975213571"},
-    {file = "rdkit_pypi-2021.9.5.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:866c09362a30fabc90ba622c35e8d3f1d8d49f734d5c2e5dfa46e1d2f7baf1d9"},
-    {file = "rdkit_pypi-2021.9.5.1-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:cc8d04b5c348e2ebeafae174151c4d34f03ed348f049c7f5a9d70f17a6dfdfec"},
-    {file = "rdkit_pypi-2021.9.5.1-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:d2dad038808d8bcf7b3b4fe681ae7803a7c910ed9f44d09f4a06b654e7605c97"},
-    {file = "rdkit_pypi-2021.9.5.1-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:f6180faf3e5e962bf146cdd65d9a85886f4a2b257105a2a0d0a27a7edd7e7e14"},
-    {file = "rdkit_pypi-2021.9.5.1-cp38-cp38-win_amd64.whl", hash = "sha256:f65f3087ecbeab4d37a6d14641cbdb6234cb996ca4a996a1916237f0cb7220bf"},
-    {file = "rdkit_pypi-2021.9.5.1-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:10bd016d4ab08c646ef8d203b3e5a7c22b3af1f8a13938c34748ebea25d15ed3"},
-    {file = "rdkit_pypi-2021.9.5.1-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:9db3401f62e9a64b99cacbfdaab295e2594e81e7b70eeb7b84008da735021b61"},
-    {file = "rdkit_pypi-2021.9.5.1-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:aff171f96be4ba75c0382564feb960f305e76f6bb552b76fd0200c4f8b91543b"},
-    {file = "rdkit_pypi-2021.9.5.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:defae2a0b2b2d6f8b4168c2a9370747b1081991a7f53f53e85f434b9d936c73f"},
-    {file = "rdkit_pypi-2021.9.5.1-cp39-cp39-win_amd64.whl", hash = "sha256:77bdd8b8e8e03206f02a7ee7f4fb94a0cdf0b8c60109b7452606995465e39b14"},
+    {file = "rdkit_pypi-2022.9.5-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:b64414daff67b82327cb84cf3b8f8eefb0be681a5dc088b43df68574509d83b0"},
+    {file = "rdkit_pypi-2022.9.5-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:832bf1fcff22f4b3ca7a18dcf931eca89ba996592e555a1c449022e65a59ed29"},
+    {file = "rdkit_pypi-2022.9.5-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:47ab1ccd22543d712139d4ebb9d4fa04dd43f2907b7de6af1117aafa79ffea2c"},
+    {file = "rdkit_pypi-2022.9.5-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:43d526f13d06b31c59b1914655ecac6e9024e59db92be579eb7d25bdd535df0a"},
+    {file = "rdkit_pypi-2022.9.5-cp310-cp310-win_amd64.whl", hash = "sha256:32bcf675c945e018a4fb7e474abf54e9f4bc7a6688cab8d6ee88a08a480d2f14"},
+    {file = "rdkit_pypi-2022.9.5-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:53313eb37f73d15d371bbd8ec13e4c92d8bf31267f674711854075261a81147c"},
+    {file = "rdkit_pypi-2022.9.5-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:6a82ee606af360cc55e4fdd04f64a08f92ed716b172c7eee6bbb866e46c0ea63"},
+    {file = "rdkit_pypi-2022.9.5-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:f79fc47608c805d9af843b772be0a6de480048698ef3086563a1504c6d989821"},
+    {file = "rdkit_pypi-2022.9.5-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:35ed0bff871c871999433a94ca8115285c2910cfad3b98763590311db4129afa"},
+    {file = "rdkit_pypi-2022.9.5-cp311-cp311-win_amd64.whl", hash = "sha256:ca2a566b19a57d20b050ddf3a2c7700902e3bc59fa70f8686a5a6d4d081f30de"},
+    {file = "rdkit_pypi-2022.9.5-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:ba80569c0a5ca910e575b576aa313c377dbe6d57b0e316c4ec7e812d903ef756"},
+    {file = "rdkit_pypi-2022.9.5-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:8a49f2e2949914fc58c15b27894aa1144b38c3761aeb2d753da2fb7a381d4b0b"},
+    {file = "rdkit_pypi-2022.9.5-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:5b86e38a4fc2a5c89ad622d2ee055814e8bb9a47f2f154ef6b569a0e2ea72b8a"},
+    {file = "rdkit_pypi-2022.9.5-cp37-cp37m-win_amd64.whl", hash = "sha256:cbadee6ab6a083f68140713537290bdfdad2c48a6a8c505fc1e23f5285a0fb63"},
+    {file = "rdkit_pypi-2022.9.5-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:b074315c53d43333a7a246aea230329067097fe3b536cfb73c2ae906f9e4f94d"},
+    {file = "rdkit_pypi-2022.9.5-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:b6d09c4f2baa54217356426c4f6c55325c54b1f331109f31a6976af57c276938"},
+    {file = "rdkit_pypi-2022.9.5-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:4bdb5eb6ae9b2626f587a23b005919557096d1b7eed5e948703987a8a9ddaa83"},
+    {file = "rdkit_pypi-2022.9.5-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e6b843040f225ad4d8fbca192bb3508a3dadd3cd2ef1d382a444369aa2d31d40"},
+    {file = "rdkit_pypi-2022.9.5-cp38-cp38-win_amd64.whl", hash = "sha256:b91fcd636c54f1ccf1fc38aa31ef52d1a72b25e1e9256251ca8b760f6954d786"},
+    {file = "rdkit_pypi-2022.9.5-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:c3ecb9f8d2058ee3583a5a0d0797b270239315139232b40c6fa150c19bcb97c1"},
+    {file = "rdkit_pypi-2022.9.5-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:5846f31b1ae46f8196ac95f10da276606092e13237fa5d81c5c8e90d7fd7c3cd"},
+    {file = "rdkit_pypi-2022.9.5-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:089a29c628305d168ec85866129e05c0203cc27c6b93ba679641c9c9e4217058"},
+    {file = "rdkit_pypi-2022.9.5-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8b1ecbfd64b889b864ff58064cd6e02f8d07bac89e4eea7bfa1039890f633038"},
+    {file = "rdkit_pypi-2022.9.5-cp39-cp39-win_amd64.whl", hash = "sha256:49a11a0073af942fb88bcaf93e6a2493adc5df5dc6624127e27b687845064e7d"},
 ]
 
 [package.dependencies]
-numpy = ">=1.19"
+numpy = "*"
 Pillow = "*"
 
 [[package]]
@@ -1417,4 +1422,4 @@ test = ["pytest (>=6.0.0)", "setuptools (>=65)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "7826a8bb2375990e63882af7f6bcd6dd9845902fa622d1623f4f23860b5b6f54"
+content-hash = "0c1e52bab81c1183f34befae56502b7bc8cbc1843be0e7ffbeb4a2d6bbd9298f"

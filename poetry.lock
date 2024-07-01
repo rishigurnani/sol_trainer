@@ -1211,23 +1211,26 @@ tests = ["black (>=22.3.0)", "flake8 (>=3.8.2)", "matplotlib (>=3.1.2)", "mypy (
 
 [[package]]
 name = "scikit-optimize"
-version = "0.9.0"
+version = "0.10.2"
 description = "Sequential model-based optimization toolbox."
 optional = false
 python-versions = "*"
 files = [
-    {file = "scikit-optimize-0.9.0.tar.gz", hash = "sha256:77d8c9e64947fc9f5cc05bbc6aed7b8a9907871ae26fe11997fd67be90f26008"},
-    {file = "scikit_optimize-0.9.0-py2.py3-none-any.whl", hash = "sha256:5a439a18232381fad4bda78e914b616416720708e67f123498d14bd2842d861a"},
+    {file = "scikit_optimize-0.10.2-py2.py3-none-any.whl", hash = "sha256:45bc7e879b086133984721f2f6735a86c085073f6c481c2ec665b5c67b44d723"},
+    {file = "scikit_optimize-0.10.2.tar.gz", hash = "sha256:00a3d91bf9015e292b6e7aaefe7e6cb95e8d25ce19adafd2cd88849e1a0b0da0"},
 ]
 
 [package.dependencies]
 joblib = ">=0.11"
-numpy = ">=1.13.3"
+numpy = ">=1.20.3"
+packaging = ">=21.3"
 pyaml = ">=16.9"
-scikit-learn = ">=0.20.0"
-scipy = ">=0.19.1"
+scikit-learn = ">=1.0.0"
+scipy = ">=1.1.0"
 
 [package.extras]
+dev = ["flake8", "pandas", "pytest", "pytest-cov", "pytest-xdist"]
+doc = ["memory-profiler", "numpydoc", "pydata-sphinx-theme", "sphinx", "sphinx-gallery (>=0.6)"]
 plots = ["matplotlib (>=2.0.0)"]
 
 [[package]]
@@ -1424,4 +1427,4 @@ test = ["pytest (>=6.0.0)", "setuptools (>=65)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "464b9169eb8f68f2a7485a4c6bc1d6d54e9a1a0ef9cb72fb843055d5b2e348a3"
+content-hash = "5cd892ef7c90543095ec598829eba70c179869c992be387466d0fa886fb1b9dd"

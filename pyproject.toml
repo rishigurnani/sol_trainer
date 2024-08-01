@@ -6,7 +6,7 @@ authors = ["Rishi Gurnani <rgurnani96@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-numpy = "^1.26"
+numpy = "^2.0"
 GPUtil = "^1.4.0"
 torchcontrib = "^0.0.2"
 wheel = "^0.42.0"
